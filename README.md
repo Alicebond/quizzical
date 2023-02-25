@@ -1,1 +1,1 @@
-A quizs game for practice React and Vite
+A quiz game to practice React and Vite
