@@ -1,8 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
+import Box from "./box";
 
 function App() {
   const [intro, setIntro] = useState(true);
+  const [quizData, setQuizData] = useState([]);
+  const [quiz, setQuiz] = useState({});
+
+  useEffect(() => {
+    fetch("https://opentdb.com/api.php?amount=5")
+      .then((res) => res.json())
+      .then((data) => setQuizData(data.results));
+  }, []);
+
+  const questions = quizData.map((i) => (
+    <Box
+      question={i.question}
+      options={[i.correct_answer, ...i.incorrect_answers]}
+      difficulty={i.difficulty}
+    />
+  ));
+
   return (
     <div className="App">
       {intro ? (
@@ -14,7 +32,10 @@ function App() {
           </button>
         </div>
       ) : (
-        <div className="quiz-page">Quiz</div>
+        <div className="quiz-page">
+          <pre className="questions">{questions}</pre>
+          <button className="btn check-btn">Check Answers</button>
+        </div>
       )}
     </div>
   );
