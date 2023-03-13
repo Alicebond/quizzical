@@ -5,19 +5,34 @@ import Box from "./box";
 function App() {
   const [intro, setIntro] = useState(true);
   const [quizData, setQuizData] = useState([]);
-  const [quiz, setQuiz] = useState({});
 
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=5")
       .then((res) => res.json())
-      .then((data) => setQuizData(data.results));
+      .then((data) => processData(data.results))
+      .then((data) => setQuizData(data));
   }, []);
+
+  function processData(data) {
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push({ ...data[i], id: i, isClicked: false });
+    }
+    return arr;
+  }
+
+  function checkAnswer(answer, id) {
+    // console.log(answer, id);
+    setQuizData((prev) => prev.map());
+  }
 
   const questions = quizData.map((i) => (
     <Box
       question={i.question}
       options={[i.correct_answer, ...i.incorrect_answers]}
       difficulty={i.difficulty}
+      handleClick={checkAnswer}
+      id={i.id}
     />
   ));
 
