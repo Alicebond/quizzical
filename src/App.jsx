@@ -16,14 +16,32 @@ function App() {
   function processData(data) {
     let arr = [];
     for (let i = 0; i < 5; i++) {
-      arr.push({ ...data[i], id: i, isClicked: false });
+      arr.push({
+        ...data[i],
+        id: i,
+        correct: false,
+        renderAnswer: false,
+        isClicked: false,
+      });
     }
     return arr;
   }
 
-  function checkAnswer(answer, id) {
-    // console.log(answer, id);
-    setQuizData((prev) => prev.map());
+  function checkSelectedOptions(option, id) {
+    setQuizData((prev) =>
+      prev.map((i) =>
+        i.id === id
+          ? i.answer === option
+            ? { ...i, correct: true, isClicked: true }
+            : { ...i, isClicked: true }
+          : { ...i, isClicked: true }
+      )
+    );
+  }
+
+  function renderAnswer() {
+    quizData.every((i) => i.isClicked) &&
+      setQuizData((prev) => prev.map((i) => ({ ...i, renderAnswer: true })));
   }
 
   const questions = quizData.map((i) => (
@@ -31,7 +49,9 @@ function App() {
       question={i.question}
       options={[i.correct_answer, ...i.incorrect_answers]}
       difficulty={i.difficulty}
-      handleClick={checkAnswer}
+      handleClick={checkSelectedOptions}
+      correct={i.correct}
+      renderAnswer={i.renderAnswer}
       id={i.id}
     />
   ));
@@ -49,7 +69,9 @@ function App() {
       ) : (
         <div className="quiz-page">
           <pre className="questions">{questions}</pre>
-          <button className="btn check-btn">Check Answers</button>
+          <button className="btn check-btn" onClick={renderAnswer}>
+            Check Answers
+          </button>
         </div>
       )}
     </div>
