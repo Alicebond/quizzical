@@ -50,6 +50,7 @@ function App() {
       options={[i.correct_answer, ...i.incorrect_answers]}
       difficulty={i.difficulty}
       handleClick={checkSelectedOptions}
+      correctAnswer={i.correct_answer}
       correct={i.correct}
       renderAnswer={i.renderAnswer}
       id={i.id}
