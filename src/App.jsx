@@ -34,7 +34,7 @@ function App() {
           ? i.answer === option
             ? { ...i, correct: true, isClicked: true }
             : { ...i, isClicked: true }
-          : { ...i, isClicked: true }
+          : i
       )
     );
   }
