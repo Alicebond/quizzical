@@ -5,6 +5,7 @@ import Box from "./box";
 function App() {
   const [intro, setIntro] = useState(true);
   const [quizData, setQuizData] = useState([]);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=5")
@@ -13,15 +14,25 @@ function App() {
       .then((data) => setQuizData(data));
   }, []);
 
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
   function processData(data) {
     let arr = [];
     for (let i = 0; i < 5; i++) {
+      let optionsArr = [data[i].correct_answer, ...data[i].incorrect_answers];
+      shuffle(optionsArr);
       arr.push({
         ...data[i],
         id: i,
         correct: false,
         renderAnswer: false,
         isClicked: false,
+        options: optionsArr,
       });
     }
     return arr;
@@ -37,6 +48,13 @@ function App() {
           : i
       )
     );
+    recordScore(option, id);
+  }
+
+  function recordScore(option, id) {
+    for (let i of quizData) {
+      if (i.id === id && i.answer === option) setScore((prev) => prev++);
+    }
   }
 
   function renderAnswer() {
@@ -44,18 +62,20 @@ function App() {
       setQuizData((prev) => prev.map((i) => ({ ...i, renderAnswer: true })));
   }
 
-  const questions = quizData.map((i) => (
-    <Box
-      question={i.question}
-      options={[i.correct_answer, ...i.incorrect_answers]}
-      difficulty={i.difficulty}
-      handleClick={checkSelectedOptions}
-      correctAnswer={i.correct_answer}
-      correct={i.correct}
-      renderAnswer={i.renderAnswer}
-      id={i.id}
-    />
-  ));
+  const questions = quizData.map((i) => {
+    return (
+      <Box
+        question={i.question}
+        options={i.options}
+        difficulty={i.difficulty}
+        handleClick={checkSelectedOptions}
+        correctAnswer={i.correct_answer}
+        correct={i.correct}
+        renderAnswer={i.renderAnswer}
+        id={i.id}
+      />
+    );
+  });
 
   return (
     <div className="App">
