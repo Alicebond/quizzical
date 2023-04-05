@@ -6,13 +6,15 @@ function App() {
   const [intro, setIntro] = useState(true);
   const [quizData, setQuizData] = useState([]);
   const [score, setScore] = useState(0);
+  const [renderAnswer, setRenderAnswer] = useState(false);
+  const [newGame, setNewGame] = useState(false);
 
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=5")
       .then((res) => res.json())
       .then((data) => processData(data.results))
       .then((data) => setQuizData(data));
-  }, []);
+  }, [newGame]);
 
   function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -30,7 +32,7 @@ function App() {
         ...data[i],
         id: i,
         correct: false,
-        renderAnswer: false,
+        renderAnswer: renderAnswer,
         isClicked: false,
         options: optionsArr,
       });
@@ -42,24 +44,29 @@ function App() {
     setQuizData((prev) =>
       prev.map((i) =>
         i.id === id
-          ? i.answer === option
+          ? i.correct_answer === option
             ? { ...i, correct: true, isClicked: true }
             : { ...i, isClicked: true }
           : i
       )
     );
-    recordScore(option, id);
   }
 
-  function recordScore(option, id) {
+  function recordScore() {
     for (let i of quizData) {
-      if (i.id === id && i.answer === option) setScore((prev) => prev++);
+      if (i.correct) setScore((prevScore) => (prevScore += 1));
     }
   }
 
-  function renderAnswer() {
-    quizData.every((i) => i.isClicked) &&
-      setQuizData((prev) => prev.map((i) => ({ ...i, renderAnswer: true })));
+  function isRenderAnswer() {
+    recordScore();
+    quizData.every((i) => i.isClicked) && setRenderAnswer((prev) => !prev);
+  }
+
+  function anotherGame() {
+    setNewGame((prev) => !prev);
+    setRenderAnswer((prev) => !prev);
+    setScore(0);
   }
 
   const questions = quizData.map((i) => {
@@ -71,7 +78,7 @@ function App() {
         handleClick={checkSelectedOptions}
         correctAnswer={i.correct_answer}
         correct={i.correct}
-        renderAnswer={i.renderAnswer}
+        renderAnswer={renderAnswer}
         id={i.id}
       />
     );
@@ -90,9 +97,18 @@ function App() {
       ) : (
         <div className="quiz-page">
           <pre className="questions">{questions}</pre>
-          <button className="btn check-btn" onClick={renderAnswer}>
-            Check Answers
-          </button>
+          {renderAnswer ? (
+            <div className="results">
+              <p className="score">{`You scored ${score}/5 correct answers`}</p>
+              <button className="btn new-btn" onClick={anotherGame}>
+                New Game
+              </button>
+            </div>
+          ) : (
+            <button className="btn check-btn" onClick={isRenderAnswer}>
+              Check Answers
+            </button>
+          )}
         </div>
       )}
     </div>

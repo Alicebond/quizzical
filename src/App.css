@@ -53,21 +53,23 @@
 
 .start-btn:hover,
 .start-btn:focus,
-.check-btn:hover {
+.check-btn:hover,
+.new-btn:hover {
   background: #d6dbf5;
   color: #293264;
   cursor: pointer;
 }
 
 .start-btn:active,
-.check-btn:active {
+.check-btn:active,
+.new-btn:active {
   box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
 }
 
 .quiz-page {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .box {
@@ -83,17 +85,21 @@
   margin: 0;
 }
 
-.check-btn {
-  margin: 0 auto;
+.check-btn,
+.new-btn {
   color: #f5f7fb;
   border: none;
   border-radius: 10px;
   background-color: #4d5b9e;
-  padding: 15px 25px;
+  padding: 13px 23px;
   cursor: pointer;
 
   font-size: 16px;
   font-weight: 600;
+}
+
+.check-btn {
+  margin: 0 auto;
   margin-bottom: 20px;
 }
 
@@ -118,4 +124,19 @@
 option-btn:active,
 option-btn:focus {
   background: black;
+}
+
+.results {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.score {
+  color: #293264;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
 }
