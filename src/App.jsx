@@ -1,3 +1,4 @@
+import { decode } from "html-entities";
 import { useState, useEffect } from "react";
 import "./App.css";
 import Box from "./box";
@@ -72,7 +73,7 @@ function App() {
   const questions = quizData.map((i) => {
     return (
       <Box
-        question={i.question}
+        question={decode(i.question)}
         options={i.options}
         difficulty={i.difficulty}
         handleClick={checkSelectedOptions}
