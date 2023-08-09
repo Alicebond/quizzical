@@ -9,12 +9,24 @@ function App() {
   const [score, setScore] = useState(0);
   const [renderAnswer, setRenderAnswer] = useState(false);
   const [newGame, setNewGame] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=5")
-      .then((res) => res.json())
-      .then((data) => processData(data.results))
-      .then((data) => setQuizData(data));
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`This is an HTTP error: The status is ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setError(null);
+        return processData(data.results);
+      })
+      .then((data) => setQuizData(data))
+      .catch((error) => setError(error.message))
+      .finally(() => setLoading(false));
   }, [newGame]);
 
   function shuffle(arr) {
@@ -68,6 +80,7 @@ function App() {
     setNewGame((prev) => !prev);
     setRenderAnswer((prev) => !prev);
     setScore(0);
+    setLoading(true);
   }
 
   const questions = quizData.map((i) => {
@@ -97,6 +110,10 @@ function App() {
         </div>
       ) : (
         <div className="quiz-page">
+          {loading && <h1> Loading... </h1>}
+          {error && (
+            <div>{`There is a problem fetching the post data - ${error}`}</div>
+          )}
           <pre className="questions">{questions}</pre>
           {renderAnswer ? (
             <div className="results">
