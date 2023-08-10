@@ -98,8 +98,22 @@ function App() {
     );
   });
 
+  if (loading)
+    return (
+      <div className="app">
+        <h1> Loading... </h1>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="app">
+        <div>{`There is a problem fetching the post data - ${error}`}</div>
+      </div>
+    );
+
   return (
-    <div className="App">
+    <div className="app">
       {intro ? (
         <div className="intro-page">
           <h3 className="title">Quizzical</h3>
@@ -110,10 +124,6 @@ function App() {
         </div>
       ) : (
         <div className="quiz-page">
-          {loading && <h1> Loading... </h1>}
-          {error && (
-            <div>{`There is a problem fetching the post data - ${error}`}</div>
-          )}
           <pre className="questions">{questions}</pre>
           {renderAnswer ? (
             <div className="results">

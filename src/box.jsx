@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { decode } from "html-entities";
 
 export default function box(props) {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -27,7 +28,7 @@ export default function box(props) {
             }
       }
     >
-      {option}
+      {decode(option)}
     </button>
   ));
 
