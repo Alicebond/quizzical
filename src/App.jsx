@@ -94,6 +94,7 @@ function App() {
         correct={i.correct}
         renderAnswer={renderAnswer}
         id={i.id}
+        key={i.id}
       />
     );
   });
