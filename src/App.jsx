@@ -11,7 +11,7 @@ function App() {
   const [newGame, setNewGame] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  // https://opentdb.com/api.php?amount=5
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=5")
       .then((res) => {
@@ -101,14 +101,14 @@ function App() {
 
   if (loading)
     return (
-      <div className="app">
+      <div className="app loading">
         <h1> Loading... </h1>
       </div>
     );
 
   if (error)
     return (
-      <div className="app">
+      <div className="app error">
         <div>{`There is a problem fetching the post data - ${error}`}</div>
       </div>
     );
