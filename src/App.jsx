@@ -55,13 +55,11 @@ function App() {
 
   function checkSelectedOptions(option, id) {
     setQuizData((prev) =>
-      prev.map((i) =>
-        i.id === id
-          ? i.correct_answer === option
-            ? { ...i, correct: true, isClicked: true }
-            : { ...i, isClicked: true }
-          : i
-      )
+      prev.map((i) => {
+        if (i.id !== id) return i;
+        else if (i.correct_answer !== option) return { ...i, isClicked: true };
+        else return { ...i, correct: true, isClicked: true };
+      })
     );
   }
 
