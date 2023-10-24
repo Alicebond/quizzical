@@ -7,9 +7,10 @@
 
 .loading,
 .error,
-.intro-page {
+.intro-page,
+.app {
   text-align: center;
-  height: 700px;
+  height: 800px;
 }
 
 .app {
@@ -112,7 +113,6 @@
 
 .check-btn {
   margin: 0 auto;
-  margin-bottom: 20px;
 }
 
 .options {
@@ -139,7 +139,6 @@ option-btn:focus {
 }
 
 .results {
-  margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
